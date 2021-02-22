@@ -1,8 +1,8 @@
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.views import View
-from jedzonko.models import Recipe
 from django.http import HttpRequest, HttpResponse
+from jedzonko.models import Recipe, Plan
 from random import shuffle
 
 
@@ -14,10 +14,13 @@ class IndexView(View):
         ctx = {"actual_date": datetime.now()}
         return render(request, "test.html", ctx)
 
+
 class MainView(View):
 
     def get(self, request):
-        ctx = {}
+        ctx = {
+            'number_of_plans': Plan.objects.count()
+        }
         return render(request, 'dashboard.html', ctx)
 
 
@@ -26,14 +29,16 @@ class LandingPageView(View):
     def get(self, request):
         recipes = list(Recipe.objects.all())
         shuffle(recipes)
-        ctx = {"recipes":recipes}
+        ctx = {"recipes": recipes}
         return render(request, "index.html", ctx)
 
-
+      
+ # Recipe ------------------------------------------------
 
 class RecipeDetails(View):
     def get(self, request):
         return render(request, 'app-recipe-details.html')
+
 
 class RecipeListView(View):
     def get(self, request):
@@ -61,19 +66,23 @@ class RecipeModifyView(View):
     def get(self, request):
         return render(request, 'app-edit-recipe.html')
 
-#Plans
+
+# Plans
 
 class PlanListView(View):
     def get(self, request):
         return render(request, 'app-schedules.html')
 
+
 class PlanDetailsView(View):
     def get(self, request):
         return render(request, 'app-details-schedules.html')
 
+
 class PlanAddView(View):
     def get(self, request):
         return render(request, 'app-add-schedules.html')
+
 
 class PlanAddRecipeView(View):
     def get(self, request):
