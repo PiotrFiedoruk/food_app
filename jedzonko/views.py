@@ -17,8 +17,11 @@ class IndexView(View):
 class MainView(View):
 
     def get(self, request):
+        plans_sorted = Plan.objects.all().order_by("-created")
+        print(plans_sorted)
         ctx = {
-            'number_of_plans': Plan.objects.count()
+            'number_of_plans': Plan.objects.count(),
+            'newest_plan': plans_sorted[0]
         }
         return render(request, 'dashboard.html', ctx)
 
