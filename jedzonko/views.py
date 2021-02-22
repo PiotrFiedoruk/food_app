@@ -1,6 +1,7 @@
 from datetime import datetime
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
+from django.http import HttpRequest, HttpResponse
 from jedzonko.models import Recipe, Plan
 from random import shuffle
 
@@ -31,11 +32,8 @@ class LandingPageView(View):
         ctx = {"recipes": recipes}
         return render(request, "index.html", ctx)
 
-
-class RecipeAddView(View):
-    def get(self, request):
-        return render(request, 'app-add-recipe.html')
-
+      
+ # Recipe ------------------------------------------------
 
 class RecipeDetails(View):
     def get(self, request):
@@ -46,6 +44,23 @@ class RecipeListView(View):
     def get(self, request):
         return render(request, 'app-recipes.html')
 
+class RecipeAddView(View):
+    def get(self, request):
+        error = request.GET.get("error")
+        return render(request, 'app-add-recipe.html')
+
+    def post(self,request):
+        ingr = request.POST.get("ingredients")
+        prep_desc = request.POST.get("preparation_description")
+        prep_time = request.POST.get("preparation_time")
+        recipe_desc = request.POST.get("recipe_description")
+        recipe_name = request.POST.get("recipe_name")
+        if ingr != '' and prep_time != '' and prep_desc != '' and recipe_desc != '' and recipe_name != '':
+            Recipe.objects.create(name=recipe_name, ingredients=ingr,preparation_time=int(prep_time), description=prep_desc, description_short=recipe_desc)
+            return redirect('recipe_list')
+        else:
+            error = "Wypełnij prawidłowo wszystkie pola"
+            return render(request,'app-add-recipe.html', {"error": error})
 
 class RecipeModifyView(View):
     def get(self, request):
