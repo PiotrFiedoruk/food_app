@@ -2,7 +2,7 @@ from datetime import datetime
 from django.shortcuts import render, redirect
 from django.views import View
 from django.http import HttpRequest, HttpResponse
-from jedzonko.models import Recipe, Plan
+from jedzonko.models import Recipe, Plan, RecipePlan
 from random import shuffle
 
 
@@ -81,10 +81,21 @@ class PlanDetailsView(View):
 
 class PlanAddView(View):
     def get(self, request):
-        planDescription
-        planName
         return render(request, 'app-add-schedules.html')
 
+    def post(self, request):
+        plan_description = request.POST.get("planDescription")
+        plan_name = request.POST.get("planName")
+        err = ""
+        if plan_description == "" or plan_name == "":
+            error = "Proszę o wypełnienie obu pól"
+            ctx = {'error': error}
+            return render(request, 'app-add-schedules.html', ctx)
+        else:
+            new_plan = Plan(name=plan_name, description=plan_description)
+            new_plan.save()
+            new_plan_id = new_plan.id
+        return redirect(f"plan/{new_plan_id}/details", )
 
 class PlanAddRecipeView(View):
     def get(self, request):
