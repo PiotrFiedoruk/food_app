@@ -71,7 +71,10 @@ class RecipeModifyView(View):
 
 class PlanListView(View):
     def get(self, request):
-        return render(request, 'app-schedules.html')
+        all_plans = Plan.objects.all()
+        ctx = {'all_plans': all_plans}
+        return render(request, 'app-schedules.html', ctx)
+
 
 
 class PlanDetailsView(View):
