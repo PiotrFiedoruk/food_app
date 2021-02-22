@@ -21,8 +21,8 @@ from jedzonko.views import IndexView, LandingPageView, MainView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('index/', IndexView.as_view()),
-    path('main/', MainView.as_view()),
+    path('index/', IndexView.as_view(), name="index"),
+    path('main/', MainView.as_view(), name="main"),
     path("", LandingPageView.as_view(), name="landing_page"),
 
 ]
