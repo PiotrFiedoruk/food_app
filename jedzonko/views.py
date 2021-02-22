@@ -18,9 +18,8 @@ class IndexView(View):
 class MainView(View):
 
     def get(self, request):
-        ctx = {
-            'number_of_plans': Plan.objects.count()
-        }
+        total_recipes = Recipe.objects.all().count()
+        ctx = {'total_recipes': total_recipes}
         return render(request, 'dashboard.html', ctx)
 
 
@@ -29,7 +28,8 @@ class LandingPageView(View):
     def get(self, request):
         recipes = list(Recipe.objects.all())
         shuffle(recipes)
-        ctx = {"recipes": recipes}
+        total_recipes = Recipe.objects.all().count()
+        ctx = {"recipes": recipes, 'total_recipes': total_recipes}
         return render(request, "index.html", ctx)
 
       
