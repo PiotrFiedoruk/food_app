@@ -4,6 +4,8 @@ from django.views import View
 from django.http import HttpRequest, HttpResponse
 from jedzonko.models import Recipe, Plan, RecipePlan
 from random import shuffle
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.generic import ListView
 
 
 # doałem komentarz testowy
@@ -68,11 +70,18 @@ class RecipeModifyView(View):
 
 
 # Plans
-
-class PlanListView(View):
+class PlanListView(ListView):
     def get(self, request):
-        all_plans = Plan.objects.all()
-        ctx = {'all_plans': all_plans}
+        all_plans = Plan.objects.all().order_by('name')
+        page = request.GET.get('page', 1)
+        paginator = Paginator(all_plans, 50)
+        try:
+            plans = paginator.page(page)
+        except PageNotAnInteger:
+            plans = paginator.page(1)
+        except EmptyPage:
+            plans = paginator.page(paginator.num_pages)
+        ctx = {'plans': plans}
         return render(request, 'app-schedules.html', ctx)
 
 
