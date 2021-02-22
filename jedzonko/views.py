@@ -1,9 +1,16 @@
 from datetime import datetime
+<<<<<<< HEAD
 
 from django.shortcuts import render, redirect
 from django.views import View
 from jedzonko.models import Recipe
 from django.http import HttpRequest, HttpResponse
+=======
+from django.shortcuts import render
+from django.views import View
+from jedzonko.models import Recipe
+from random import shuffle
+>>>>>>> 68682a5687d08e86dd785ccd3e2754446cf32565
 
 # doałem komentarz testowy
 
@@ -13,22 +20,34 @@ class IndexView(View):
         ctx = {"actual_date": datetime.now()}
         return render(request, "test.html", ctx)
 
-
-
 class MainView(View):
 
     def get(self, request):
         ctx = {}
         return render(request, 'dashboard.html', ctx)
 
-class LandingPageView(View):
-  
-    def get(self, request):
-        return render(request, "index.html")
 
+class LandingPageView(View):
+
+    def get(self, request):
+        recipes = list(Recipe.objects.all())
+        shuffle(recipes)
+        ctx = {"recipes":recipes}
+        return render(request, "index.html", ctx)
+
+      
 class RecipeAddView(View):
-    def get(self,request):
-        return render(request,'app-add-recipe.html')
+    def get(self, request):
+        return render(request, 'app-add-recipe.html')
+
+class RecipeDetails(View):
+    def get(self, request):
+        return render(request, 'app-recipe-details.html')
+
+class RecipeListView(View):
+    def get(self, request):
+        return render(request, 'app-recipes.html')
+
 
     def post(self,request):
         ingr = request.POST.get("ingredients")
@@ -44,3 +63,25 @@ class RecipeAddView(View):
             return redirect('dashboard.html')
         else:
             return redirect('app-add-recipe.html')
+
+class RecipeModifyView(View):
+    def get(self, request):
+        return render(request, 'app-edit-recipe.html')
+
+#Plans
+
+class PlanListView(View):
+    def get(self, request):
+        return render(request, 'app-schedules.html')
+
+class PlanDetailsView(View):
+    def get(self, request):
+        return render(request, 'app-details-schedules.html')
+
+class PlanAddView(View):
+    def get(self, request):
+        return render(request, 'app-add-schedules.html')
+
+class PlanAddRecipeView(View):
+    def get(self, request):
+        return render(request, 'app-add-schedules.html')

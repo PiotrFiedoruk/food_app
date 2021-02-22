@@ -17,7 +17,7 @@
 <body>
     <header class="page-header">
         <nav class="navbar navbar-expand-lg justify-content-between">
-            <a href="/" class="navbar-brand main-logo main-logo-smaller">
+            <a href="{% url 'landing_page' %}" class="navbar-brand main-logo main-logo-smaller">
                 Zaplanuj <span>Jedzonko</span>
             </a>
          <div class="d-flex justify-content-around">
@@ -31,43 +31,23 @@
         <div class="row dashboard-nowrap">
                 <ul class="nav flex-column long-bg">
                         <li class="nav-item">
-                            <a class="nav-link" href="">
+                            <a class="nav-link" href="{% url 'main' %}">
                                 <span>Pulpit</span>
                                 <i class="fas fa-angle-right"></i>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">
+                            <a class="nav-link" href="{% url 'recipe_list' %}">
                                 <span>Przepisy</span>
                                 <i class="fas fa-angle-right"></i>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">
+                            <a class="nav-link" href="{% url 'plan_list' %}">
                                 <span>Plany</span>
                                 <i class="fas fa-angle-right"></i>
                             </a>
                         </li>
-                        <!-- Podstrony związane z zarządzaniem użytkownikami
-                        <li class="nav-item">
-                            <a class="nav-link" href="">
-                                <span>Edytuj dane</span>
-                                <i class="fas fa-angle-right"></i>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled" href="">
-                                <span>Zmień hasło</span>
-                                <i class="fas fa-angle-right"></i>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="">
-                                <span>Użytkownicy</span>
-                                <i class="fas fa-angle-right"></i>
-                            </a>
-                        </li>
-                        -->
                     </ul>
 
             <div class="m-4 p-3 width-medium text-color-darker">
@@ -88,3 +68,4 @@
         crossorigin="anonymous"></script>
 </body>
 </html>
+
