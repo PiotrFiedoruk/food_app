@@ -10,9 +10,8 @@ class Recipe(models.Model):
     updated = models.DateField(auto_now=True)
     preparation_time = models.IntegerField()
     votes = models.IntegerField(default=0)
-<<<<<<< HEAD
     description_short = models.CharField(max_length=128)
-=======
+
 
 
 class Plan(models.Model):
@@ -46,4 +45,3 @@ class Page(models.Model):
 
 
 
->>>>>>> 68682a5687d08e86dd785ccd3e2754446cf32565
