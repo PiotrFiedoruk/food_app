@@ -26,12 +26,12 @@ urlpatterns = [
     path('main/', MainView.as_view(), name="main"),
     #Recipes
     path('recipe/add/', RecipeAddView.as_view(), name="recipe_add"),
-    path('recipe/<int:id>', RecipeDetails.as_view(), name='recipe_details'),
+    path('recipe/<int:id>/', RecipeDetails.as_view(), name='recipe_details'),
     path('recipe/list/', RecipeListView.as_view(), name='recipe_list'),
-    path('recipe/modify/<int:id>', RecipeModifyView.as_view(), name='recipe_modify'),
+    path('recipe/modify/<int:id>/', RecipeModifyView.as_view(), name='recipe_modify'),
     # Plans
     path('plan/list/', PlanListView.as_view(), name='plan_list'),
-    path('plan/<int:id>', PlanDetailsView.as_view(), name='plan_details'),
+    path('plan/<int:id>/', PlanDetailsView.as_view(), name='plan_details'),
     path('plan/add/', PlanAddView.as_view(), name='plan_add'),
     path('plan/add-recipe/', PlanAddRecipeView.as_view(), name='plan_add_recipe'),
     path('admin/', admin.site.urls),
