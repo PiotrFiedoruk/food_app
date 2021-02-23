@@ -103,6 +103,7 @@ class RecipeAddView(View):
 
 class RecipeModifyView(View):
     def get(self, request, id):
+        return render(request, 'app-edit-recipe.html')
         try:
             recipe = Recipe.objects.get(pk=id)
         except jedzonko.models.Recipe.DoesNotExist:
