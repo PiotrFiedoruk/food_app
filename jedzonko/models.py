@@ -10,7 +10,7 @@ class Recipe(models.Model):
     updated = models.DateField(auto_now=True)
     preparation_time = models.IntegerField()
     votes = models.IntegerField(default=0)
-    description_short = models.CharField(max_length=128) #???
+    description_short = models.CharField(max_length=128)
 
 
 
@@ -18,7 +18,7 @@ class Plan(models.Model):
     name = models.CharField(max_length=64)
     description = models.TextField()
     created = models.DateField(auto_now=True)
-    recipe = models.ManyToManyField(Recipe, through='RecipePlan') #???
+    recipe = models.ManyToManyField(Recipe, through='RecipePlan')
 
 
 class DayName(models.Model):
