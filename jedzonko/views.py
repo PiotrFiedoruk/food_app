@@ -21,7 +21,7 @@ class MainView(View):
 
     def get(self, request):
         total_recipes = Recipe.objects.all().count()
-        ctx = {'total_recipes': total_recipes, }
+        ctx = {'total_recipes': total_recipes}
         return render(request, 'dashboard.html', ctx)
 
 
@@ -37,6 +37,7 @@ class LandingPageView(View):
       
  # Recipe ------------------------------------------------
 
+
 class RecipeDetails(View):
     def get(self, request):
         return render(request, 'app-recipe-details.html')
@@ -44,7 +45,13 @@ class RecipeDetails(View):
 
 class RecipeListView(View):
     def get(self, request):
-        return render(request, 'app-recipes.html')
+        recipes_list = Recipe.objects.all().order_by("-votes", "created")
+        paginator = Paginator(recipes_list, 50)
+        page = request.GET.get('page')
+        recipes = paginator.get_page(page)
+        ctx = {"recipes":recipes}
+        return render(request, 'app-recipes.html', ctx)
+
 
 class RecipeAddView(View):
     def get(self, request):
