@@ -6,6 +6,7 @@ from random import shuffle
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView
 
+
 class IndexView(View):
 
     def get(self, request):
