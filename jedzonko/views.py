@@ -38,7 +38,14 @@ class LandingPageView(View):
  # Recipe ------------------------------------------------
 
 class RecipeDetails(View):
-    def get(self, request):
+    def get(self, request, id):
+        recipe = Recipe.objects.get(id=id)
+        name = recipe.name
+        ingredients = recipe.ingredients
+        created = recipe.created
+
+
+
         return render(request, 'app-recipe-details.html')
 
 
