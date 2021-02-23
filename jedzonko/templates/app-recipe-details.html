@@ -35,9 +35,18 @@
             </tr>
              <tr class="d-flex">
                 <th scope="row" class="col-2">Liczba polubień</th>
-                <td class="col-7">
-                    {{ recipe.votes }}
-                </td>
+                <td class="">
+                    {{ recipe.votes }} </td>
+                    <form method="post">
+                        {% csrf_token %}
+                        <td>
+                        <input class="btn btn-color rounded-0 pt-0 pb-0 pr-4 pl-4" name="submit" type="submit" value="Polub przepis">
+                        </td>
+                        <td>
+                        <input class="btn btn-color rounded-0 pt-0 pb-0 pr-4 pl-4" name="submit" type="submit" value="Nie lubię przepisu">
+                        </td>
+                    </form>
+
             </tr>
             </tbody>
         </table>
