@@ -1,15 +1,10 @@
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.views import View
-from django.http import HttpRequest, HttpResponse
-from jedzonko.models import Recipe, Plan, RecipePlan
+from jedzonko.models import Recipe, Plan, RecipePlan, DayName
 from random import shuffle
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView
-from django.core.paginator import Paginator
-
-
-# doałem komentarz testowy
 
 class IndexView(View):
 
@@ -42,15 +37,6 @@ class LandingPageView(View):
 class RecipeDetails(View):
     def get(self, request, id):
         recipe = Recipe.objects.get(id=id)
-        # name = recipe.name
-        # ingredients = recipe.ingredients
-        # created = recipe.created
-        # updated = recipe.updated
-        # preparation_time = recipe.preparation_time
-        # votes = recipe.votes
-        # description_short = recipe.description_short
-        # ctx = {'name': name, 'ingredients': ingredients, 'created': created, 'updated': updated,
-        #        'preparation_time':preparation_time, 'votes': votes, 'description_short': description_short}
         list_ingredients = recipe.ingredients.splitlines()
         ctx = {'recipe': recipe, 'list_ingredients': list_ingredients}
         return render(request, 'app-recipe-details.html', ctx)
@@ -91,7 +77,7 @@ class RecipeModifyView(View):
 
 # Plans
 class PlanListView(ListView):
-    def get(self, request):
+    def get(self, request): #paginating function works despite warning. Warning to be fixed in PyCharm update March 2021
         all_plans = Plan.objects.all().order_by('name')
         page = request.GET.get('page', 1)
         paginator = Paginator(all_plans, 50)
@@ -107,7 +93,8 @@ class PlanListView(ListView):
 
 
 class PlanDetailsView(View):
-    def get(self, request):
+
+    def get(self, request, id):
         return render(request, 'app-details-schedules.html')
 
 
@@ -118,7 +105,7 @@ class PlanAddView(View):
     def post(self, request):
         plan_description = request.POST.get("planDescription")
         plan_name = request.POST.get("planName")
-        err = ""
+        # validate form and save if ok
         if plan_description == "" or plan_name == "":
             error = "Proszę o wypełnienie obu pól"
             ctx = {'error': error}
@@ -130,5 +117,29 @@ class PlanAddView(View):
         return redirect(f"plan/{new_plan_id}/details", )
 
 class PlanAddRecipeView(View):
+
     def get(self, request):
-        return render(request, 'app-add-schedules.html')
+        # get objects for form select fields
+        plan_list = Plan.objects.all()
+        recipe_list = Recipe.objects.all()
+        day_list = DayName.objects.all()
+        ctx = {'plan_list': plan_list, 'recipe_list': recipe_list, 'day_list': day_list}
+        return render(request, 'app-schedules-meal-recipe.html', ctx)
+
+    def post(self, request):
+        # get POST values
+        plan_id = request.POST.get('choosePlan')
+        name = request.POST.get('name')
+        number = request.POST.get('number')
+        recipe_id = request.POST.get('recipe')
+        day_order = request.POST.get('day')
+        # create objects
+        plan_obj = Plan.objects.get(id=plan_id)
+        recipe_obj = Recipe.objects.get(id=recipe_id)
+        day_obj = DayName.objects.get(order=day_order)
+        # save to DB
+        new_recipe_plan = RecipePlan(meal_name=name, order=number, day_name=day_obj, recipe=recipe_obj, plan=plan_obj)
+        new_recipe_plan.save()
+        url_id = new_recipe_plan.id
+        return redirect(f"/plan/{url_id}")
+
