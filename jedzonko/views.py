@@ -96,7 +96,7 @@ class RecipeAddView(View):
             return render(request,'app-add-recipe.html', {"error": error})
 
 class RecipeModifyView(View):
-    def get(self, request):
+    def get(self, request, id):
         return render(request, 'app-edit-recipe.html')
 
 
