@@ -1,5 +1,5 @@
 from datetime import datetime
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,HttpResponse
 from django.views import View
 from jedzonko.models import Recipe, Plan, DayName, RecipePlan, Page
 
@@ -120,7 +120,19 @@ class PlanListView(ListView):
 
 class PlanDetailsView(View):
     def get(self, request, id):
-        return render(request, 'app-details-schedules.html')
+        plan = Plan.objects.get(pk=id)
+        pn = plan.recipeplan_set.filter(day_name=(DayName.objects.get(name='poniedziałek')))
+        wt = plan.recipeplan_set.filter(day_name=(DayName.objects.get(name='wtorek')))
+        sr = plan.recipeplan_set.filter(day_name=(DayName.objects.get(name='środa')))
+        cz = plan.recipeplan_set.filter(day_name=(DayName.objects.get(name='czwartek')))
+        pt = plan.recipeplan_set.filter(day_name=(DayName.objects.get(name='piątek')))
+        so = plan.recipeplan_set.filter(day_name=(DayName.objects.get(name='sobota')))
+        nd = plan.recipeplan_set.filter(day_name=(DayName.objects.get(name='niedziela')))
+        ctx = {
+            "plan": plan,
+            'recipeplan_per_days': [pn, wt, sr, cz, pt, so, nd],
+        }
+        return render(request, 'app-details-schedules.html', ctx)
 
 
 class PlanAddView(View):
@@ -165,6 +177,6 @@ class PlanAddRecipeView(View):
         # save to DB
         new_recipe_plan = RecipePlan(meal_name=name, order=number, day_name=day_obj, recipe=recipe_obj, plan=plan_obj)
         new_recipe_plan.save()
-        url_id = new_recipe_plan.id
+        url_id = new_recipe_plan.plan.id
         return redirect(f"/plan/{url_id}")
 
