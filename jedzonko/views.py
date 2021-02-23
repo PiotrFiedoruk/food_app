@@ -27,7 +27,6 @@ class MainView(View):
         pt = newest_plan.recipeplan_set.filter(day_name=(DayName.objects.get(name='piątek')))
         so = newest_plan.recipeplan_set.filter(day_name=(DayName.objects.get(name='sobota')))
         nd = newest_plan.recipeplan_set.filter(day_name=(DayName.objects.get(name='niedziela')))
-        print(pn[1].day_name.name)
         ctx = {
             'number_of_plans': Plan.objects.count(),
             'newest_plan': plans_sorted[0],
@@ -102,6 +101,7 @@ class RecipeModifyView(View):
 
 
 # Plans
+
 class PlanListView(ListView):
     def get(self, request): #paginating function works despite warning. Warning to be fixed in PyCharm update March 2021
         all_plans = Plan.objects.all().order_by('name')
