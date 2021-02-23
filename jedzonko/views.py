@@ -42,6 +42,16 @@ class RecipeDetails(View):
         ctx = {'recipe': recipe, 'list_ingredients': list_ingredients}
         return render(request, 'app-recipe-details.html', ctx)
 
+    def post(self, request, id):
+        recipe = Recipe.objects.get(id=id)
+        if request.POST["submit"]=="Polub przepis":
+            recipe.votes += 1
+            recipe.save()
+        elif request.POST["submit"]=="Nie lubię przepisu":
+            recipe.votes -= 1
+            recipe.save()
+        return redirect('recipe_details', id)
+
 
 class RecipeListView(View):
     def get(self, request):
