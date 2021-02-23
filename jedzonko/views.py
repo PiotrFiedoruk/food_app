@@ -94,7 +94,6 @@ class PlanListView(ListView):
 
 
 class PlanDetailsView(View):
-
     def get(self, request, id):
         return render(request, 'app-details-schedules.html')
 
@@ -115,7 +114,7 @@ class PlanAddView(View):
             new_plan = Plan(name=plan_name, description=plan_description)
             new_plan.save()
             new_plan_id = new_plan.id
-        return redirect(f"plan/{new_plan_id}/details", )
+        return redirect('plan_details', new_plan_id)
 
 class PlanAddRecipeView(View):
 
