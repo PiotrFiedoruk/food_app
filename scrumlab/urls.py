@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 
 
-from jedzonko.views import IndexView, LandingPageView, MainView, RecipeAddView, RecipeDetails, RecipeListView, \
+from jedzonko.views import IndexView, LandingPageView, MainView, RecipeDetails, RecipeListView, \
     RecipeAddView, RecipeModifyView, PlanDetailsView, PlanAddView, PlanAddRecipeView, PlanListView
 
 urlpatterns = [

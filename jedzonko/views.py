@@ -83,7 +83,7 @@ class RecipeAddView(View):
         error = request.GET.get("error")
         return render(request, 'app-add-recipe.html')
 
-    def post(self,request):
+    def post(self, request):
         ingr = request.POST.get("ingredients")
         prep_desc = request.POST.get("preparation_description")
         prep_time = request.POST.get("preparation_time")
