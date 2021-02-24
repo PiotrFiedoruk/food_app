@@ -43,7 +43,17 @@ class LandingPageView(View):
         recipes = list(Recipe.objects.all())
         shuffle(recipes)
         total_recipes = Recipe.objects.all().count()
-        ctx = {"recipes": recipes, 'total_recipes': total_recipes}
+        contact = ''
+        about = ''
+        try:
+            contact = Page.objects.get(slug__contains="contact")
+        except:
+            pass
+        try:
+            about = Page.objects.get(slug__contains="about")
+        except:
+            pass
+        ctx = {"recipes": recipes, 'total_recipes': total_recipes, "contact": contact, "about": about}
         return render(request, "index.html", ctx)
 
 
@@ -201,3 +211,20 @@ class PlanAddRecipeView(View):
         new_recipe_plan.save()
         url_id = new_recipe_plan.plan.id
         return redirect(f"/plan/{url_id}")
+
+
+class ContactView(View):
+
+    def get(self, request):
+        contact = Page.objects.get(slug__contains="contact")
+        ctx = {"contact": contact}
+        return render(request, "contact.html", ctx)
+
+
+class AboutView(View):
+
+    def get(self, request):
+        about = Page.objects.get(slug__contains="about")
+        ctx = {"about": about}
+        return render(request, "about.html", ctx)
+
