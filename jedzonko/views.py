@@ -29,6 +29,7 @@ class MainView(View):
         so = newest_plan.recipeplan_set.filter(day_name=(DayName.objects.get(name='sobota')))
         nd = newest_plan.recipeplan_set.filter(day_name=(DayName.objects.get(name='niedziela')))
         ctx = {
+            "number_of_recipes": Recipe.objects.count(),
             'number_of_plans': Plan.objects.count(),
             'newest_plan': plans_sorted[0],
             'recipeplan_per_days': [pn, wt, sr, cz, pt, so, nd]
@@ -110,13 +111,13 @@ class RecipeAddView(View):
 
 class RecipeModifyView(View):
     def get(self, request, id):
-        return render(request, 'app-edit-recipe.html')
         try:
             recipe = Recipe.objects.get(pk=id)
         except jedzonko.models.Recipe.DoesNotExist:
             raise Http404("Question does not exist")
         return render(request, 'app-edit-recipe.html', {'recipe': recipe})
-    def post(self,request, id):
+
+    def post(self, request, id):
         ingr = request.POST.get("ingredients")
         prep_desc = request.POST.get("preparation_description")
         prep_time = request.POST.get("preparation_time")
@@ -227,4 +228,3 @@ class AboutView(View):
         about = Page.objects.get(slug__contains="about")
         ctx = {"about": about}
         return render(request, "about.html", ctx)
-
