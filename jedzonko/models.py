@@ -33,6 +33,9 @@ class RecipePlan(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
 
+    class Meta:
+        ordering = ('order',)
+
 
 class Page(models.Model):
     title = models.CharField(max_length=64)

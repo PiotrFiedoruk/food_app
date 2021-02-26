@@ -30,13 +30,21 @@
                 </li>
                 -->
                 <li class="nav-item ml-4">
-                    <a class="nav-link" href="#about">o aplikacji</a>
+                    {% if about != '' %}
+                        <a class="nav-link" href="/about/">o aplikacji</a>
+                    {% else %}
+                        <a class="nav-link" href="#about">o aplikacji</a>
+                    {% endif %}
                 </li>
                 <li class="nav-item ml-4">
                     <a class="nav-link disabled" href="/recipe/list/">Przepisy</a>
                 </li>
                 <li class="nav-item ml-4">
-                    <a class="nav-link disabled" href="#contact">Kontakt</a>
+                    {% if contact != '' %}
+                        <a class="nav-link disabled" href="/contact/">Kontakt</a>
+                    {% else %}
+                        <a class="nav-link disabled" href="#contact">Kontakt</a>
+                    {% endif %}
                 </li>
             </ul>
         </nav>

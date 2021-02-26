@@ -1,12 +1,9 @@
 from datetime import datetime
-
-from django.http import Http404
 from django.shortcuts import render, redirect
+from django.http import Http404
 from django.views import View
-
 import jedzonko
 from jedzonko.models import Recipe, Plan, DayName, RecipePlan, Page
-
 from random import shuffle
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView
@@ -32,6 +29,7 @@ class MainView(View):
         so = newest_plan.recipeplan_set.filter(day_name=(DayName.objects.get(name='sobota')))
         nd = newest_plan.recipeplan_set.filter(day_name=(DayName.objects.get(name='niedziela')))
         ctx = {
+            "number_of_recipes": Recipe.objects.count(),
             'number_of_plans': Plan.objects.count(),
             'newest_plan': plans_sorted[0],
             'recipeplan_per_days': [pn, wt, sr, cz, pt, so, nd]
@@ -46,7 +44,17 @@ class LandingPageView(View):
         recipes = list(Recipe.objects.all())
         shuffle(recipes)
         total_recipes = Recipe.objects.all().count()
-        ctx = {"recipes": recipes, 'total_recipes': total_recipes}
+        contact = ''
+        about = ''
+        try:
+            contact = Page.objects.get(slug__contains="contact")
+        except:
+            pass
+        try:
+            about = Page.objects.get(slug__contains="about")
+        except:
+            pass
+        ctx = {"recipes": recipes, 'total_recipes': total_recipes, "contact": contact, "about": about}
         return render(request, "index.html", ctx)
 
 
@@ -108,7 +116,8 @@ class RecipeModifyView(View):
         except jedzonko.models.Recipe.DoesNotExist:
             raise Http404("Question does not exist")
         return render(request, 'app-edit-recipe.html', {'recipe': recipe})
-    def post(self,request, id):
+
+    def post(self, request, id):
         ingr = request.POST.get("ingredients")
         prep_desc = request.POST.get("preparation_description")
         prep_time = request.POST.get("preparation_time")
@@ -121,6 +130,10 @@ class RecipeModifyView(View):
         else:
             error = "Wypełnij prawidłowo wszystkie pola"
             return render(request, 'app-edit-recipe.html', {"error": error})
+<<<<<<< HEAD
+=======
+
+>>>>>>> fb247a8cd53bd1b0e73dbbdf70ca9e4a2be8c87e
 
 # Plans
 
@@ -141,7 +154,19 @@ class PlanListView(ListView):
 
 class PlanDetailsView(View):
     def get(self, request, id):
-        return render(request, 'app-details-schedules.html')
+        plan = Plan.objects.get(pk=id)
+        pn = plan.recipeplan_set.filter(day_name=(DayName.objects.get(name='poniedziałek')))
+        wt = plan.recipeplan_set.filter(day_name=(DayName.objects.get(name='wtorek')))
+        sr = plan.recipeplan_set.filter(day_name=(DayName.objects.get(name='środa')))
+        cz = plan.recipeplan_set.filter(day_name=(DayName.objects.get(name='czwartek')))
+        pt = plan.recipeplan_set.filter(day_name=(DayName.objects.get(name='piątek')))
+        so = plan.recipeplan_set.filter(day_name=(DayName.objects.get(name='sobota')))
+        nd = plan.recipeplan_set.filter(day_name=(DayName.objects.get(name='niedziela')))
+        ctx = {
+            "plan": plan,
+            'recipeplan_per_days': [pn, wt, sr, cz, pt, so, nd],
+        }
+        return render(request, 'app-details-schedules.html', ctx)
 
 
 class PlanAddView(View):
@@ -187,5 +212,21 @@ class PlanAddRecipeView(View):
         # save to DB
         new_recipe_plan = RecipePlan(meal_name=name, order=number, day_name=day_obj, recipe=recipe_obj, plan=plan_obj)
         new_recipe_plan.save()
-        url_id = new_recipe_plan.id
+        url_id = new_recipe_plan.plan.id
         return redirect(f"/plan/{url_id}")
+
+
+class ContactView(View):
+
+    def get(self, request):
+        contact = Page.objects.get(slug__contains="contact")
+        ctx = {"contact": contact}
+        return render(request, "contact.html", ctx)
+
+
+class AboutView(View):
+
+    def get(self, request):
+        about = Page.objects.get(slug__contains="about")
+        ctx = {"about": about}
+        return render(request, "about.html", ctx)
