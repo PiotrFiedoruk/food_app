@@ -103,9 +103,6 @@ class RecipeAddView(View):
 
 class RecipeModifyView(View):
     def get(self, request, id):
-<<<<<<< HEAD
-        return render(request, 'app-edit-recipe.html')
-=======
         try:
             recipe = Recipe.objects.get(pk=id)
         except jedzonko.models.Recipe.DoesNotExist:
@@ -124,14 +121,11 @@ class RecipeModifyView(View):
         else:
             error = "Wypełnij prawidłowo wszystkie pola"
             return render(request, 'app-edit-recipe.html', {"error": error})
->>>>>>> 383ec7077b5d57cb0d43ba3208c6ba1d46b40783
-
 
 # Plans
 
 class PlanListView(ListView):
-    def get(self,
-            request):  # paginating function works despite warning. Warning to be fixed in PyCharm update March 2021
+    def get(self, request):  # paginating function works despite warning. Warning to be fixed in PyCharm update March 2021
         all_plans = Plan.objects.all().order_by('name')
         page = request.GET.get('page', 1)
         paginator = Paginator(all_plans, 50)
