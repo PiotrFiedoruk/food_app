@@ -130,10 +130,6 @@ class RecipeModifyView(View):
         else:
             error = "Wypełnij prawidłowo wszystkie pola"
             return render(request, 'app-edit-recipe.html', {"error": error})
-<<<<<<< HEAD
-=======
-
->>>>>>> fb247a8cd53bd1b0e73dbbdf70ca9e4a2be8c87e
 
 # Plans
 
